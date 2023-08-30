@@ -1,20 +1,19 @@
 import time
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import pyperclip
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Crawler:
     def __init__(self, args):
         self.driver = webdriver.Chrome()
         self.login_id = args.login_id
-        self.login_pw = args.login_pwl
+        self.login_pw = args.login_pw
         self.favorite_list_name = args.favorite_list_name
         self.driver.implicitly_wait(1)
 
