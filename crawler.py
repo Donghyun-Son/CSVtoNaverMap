@@ -76,8 +76,8 @@ class Crawler:
         map_home_button.click()
 
     def check_new_device(self):
-        enroll_button = self.wait_until(By.CSS_SELECTOR, "#new\\.save")
-        enroll_button.click()
+        not_enroll_button = self.wait_until(By.CSS_SELECTOR, "#new\\.dontsave")
+        not_enroll_button.click()
 
     def search_address(self, address):
         input_box = self.wait_until(By.CSS_SELECTOR, "#section_content > div > div.sc-iwm9f4.jCPpmH > div > div > div")
