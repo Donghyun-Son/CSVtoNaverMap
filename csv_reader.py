@@ -3,26 +3,34 @@ import pandas as pd
 
 class Reader:
     def __init__(self, args):
-        self.path = args.excel_path
-        self.column_name = args.column_name
-        self.data = None
+        self.column = args.column
+        self.encoding = args.encoding
+        self._locations = []
+        self.keywords = args.keyword
 
-    def read_csv(self):
-        self.data = pd.read_csv(self.path, encoding="EUC-KR")
+        if args.path.endswith(".csv"):
+            self.read_csv(args.path)
+        elif args.path.endswith(".txt"):
+            self.read_txt(args.path)
+        else:
+            raise ValueError("File extension must be csv or txt")
 
-    def get_locations(self):
-        location_list = self.data[self.column_name].tolist()
-        modified_locations = [self._modify_location(loc) for loc in location_list]
-        return modified_locations
+    def read_csv(self, path):
+        data = pd.read_csv(path, encoding=self.encoding)
+        self._locations = data[self.column].tolist()
 
-    # 필터링이 필요한 경우에만 사용
-    def _modify_location(self, location):
-        # "~" 가 있는 경우: "~" 앞의 위치를 사용
-        if "~" in location:
-            location = location.split("~")[0].strip()
+    def read_txt(self, path):
+        with open(path, "r", encoding=self.encoding) as f:
+            self._locations = f.readlines()
 
-        # "(" 가 있는 경우: "(" 이전의 내용만 사용
-        if "(" in location:
-            location = location.split("(")[0].strip()
-
+    @staticmethod
+    def filtering_location(location):
+        for keyword in ["~", "("]:
+            if keyword in location:
+                location = location.split(keyword)[0].strip()
         return location
+
+    @property
+    def locations(self):
+        filtering_locations = [Reader.filtering_location(loc) for loc in self._locations]
+        return filtering_locations
